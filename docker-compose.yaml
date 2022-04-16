@@ -6,7 +6,7 @@ nginx-proxy:
     - "443:443"
   volumes:
     - /var/run/docker.sock:/tmp/docker.sock:ro
-    - /home/portfolio/certs:/etc/nginx/certs:ro
+    - certs:/etc/nginx/certs:ro
     - /etc/nginx/vhost.d
     - /usr/share/nginx/html
 
@@ -14,7 +14,7 @@ letsencrypt:
   image: nginxproxy/acme-companion
   restart: always
   volumes:
-    - /home/portfolio/certs:/etc/nginx/certs:rw
+    - certs:/etc/nginx/certs:rw
     - /var/run/docker.sock:/var/run/docker.sock:ro
   volumes_from:
     - nginx-proxy:rw
