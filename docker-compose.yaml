@@ -1,0 +1,33 @@
+nginx-proxy:
+  image: nginxproxy/nginx-proxy
+  restart: always
+  ports:
+    - "80:80"
+    - "443:443"
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+    - /home/portfolio/certs:/etc/nginx/certs:ro
+    - /etc/nginx/vhost.d
+    - /usr/share/nginx/html
+
+letsencrypt:
+  image: nginxproxy/acme-companion
+  restart: always
+  volumes:
+    - /home/portfolio/certs:/etc/nginx/certs:rw
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+  volumes_from:
+    - nginx-proxy:rw
+
+# To add a website use this mockup
+# www:
+#    image: nginx
+#    restart: always
+#    expose:
+#     - "80"
+#    volumes:
+#     - /home/portfolio:/usr/share/nginx/html:ro
+#    environment:
+#     - VIRTUAL_HOST=sebastianreyes.cl,www.sebastianreyes.cl
+#     - LETSENCRYPT_HOST=sebastianreyes.cl,www.sebastianreyes.cl
+#     - LETSENCRYPT_EMAIL=sebastian@sebastianreyes.cl
